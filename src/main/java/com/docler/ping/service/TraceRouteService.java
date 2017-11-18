@@ -10,6 +10,7 @@ import com.docler.ping.config.AppProperties;
 import com.docler.ping.helper.AppException;
 import com.docler.ping.helper.CommandRunner;
 import com.docler.ping.model.Status;
+import com.docler.ping.model.Status.Code;
 
 /**
  * Service to perform TraceRoute operations.
@@ -49,8 +50,10 @@ public class TraceRouteService {
 			final String traceRouteCommand = prop.getTracertCommand().trim() + " " + hostname;
 
 			Runnable traceRouteTask = () -> {
-				Status status = new CommandRunner().run(traceRouteCommand);
-				reportingService.report(hostname, null, status.getText(), null);
+				final Status status = new CommandRunner().run(traceRouteCommand);
+				if(null != status && status.getCode().equals(Code.FAILURE)) {
+					reportingService.report(hostname, null, status.getText(), null);
+				}
 			};
 
 			executorService.scheduleAtFixedRate(traceRouteTask, prop.getTracertInitialDelay(),

@@ -10,6 +10,7 @@ import com.docler.ping.config.AppProperties;
 import com.docler.ping.helper.AppException;
 import com.docler.ping.helper.CommandRunner;
 import com.docler.ping.model.Status;
+import com.docler.ping.model.Status.Code;
 
 /**
  * Service to perform ICMP operations.
@@ -49,8 +50,10 @@ public class ICMPService {
 			final String icmpCommand = prop.getIcmpCommand() + " " + hostname;
 
 			Runnable icmpTask = () -> {
-				Status status = new CommandRunner().run(icmpCommand);
-				reportingService.report(hostname, status.getText(), null, null);
+				final Status status = new CommandRunner().run(icmpCommand);
+				if(null != status && status.getCode().equals(Code.FAILURE)) {
+					reportingService.report(hostname, status.getText(), null, null);
+				}
 			};
 
 			executorService.scheduleAtFixedRate(icmpTask, prop.getIcmpInitialDelay(), prop.getIcmpCycleDelay(),

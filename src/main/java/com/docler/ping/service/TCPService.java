@@ -10,6 +10,7 @@ import com.docler.ping.config.AppProperties;
 import com.docler.ping.helper.AppException;
 import com.docler.ping.helper.TCPIP;
 import com.docler.ping.model.Status;
+import com.docler.ping.model.Status.Code;
 
 /**
  * Service to perform TCP IP operations.
@@ -49,8 +50,10 @@ public class TCPService {
 			}
 			
 			Runnable tcpTask = () -> {
-				Status status = new TCPIP().run(httpURL, connectionTimeout, readTimeout);
-				reportingService.report(httpURL, null, null, status.getText());
+				final Status status = new TCPIP().run(httpURL, connectionTimeout, readTimeout);
+				if(null != status && status.getCode().equals(Code.FAILURE)) {
+					reportingService.report(httpURL, null, null, status.getText());
+				}
 			};
 
 			executorService.scheduleAtFixedRate(tcpTask, prop.getHttpInitialDelay(), prop.getHttpCycleDelay(),

@@ -21,8 +21,8 @@ public class TCPTest {
 	@Parameters
 	public static Collection<Object[]> data() {
 		Object[][] data = new Object[][] { 
-			{ "http://google.com", "http://invalidhost1.com", 5000, 5000 },
-			{ "http://facebook.com", "http://invalidhost2.com", 5000, 5000 } };
+			{ "http://jasmin.com", "http://invalidhost1.com", 5000, 5000 },
+			{ "http://oranum.com", "http://invalidhost2.com", 5000, 5000 } };
 		return Arrays.asList(data);
 	}
 

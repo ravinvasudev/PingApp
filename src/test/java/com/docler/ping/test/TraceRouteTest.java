@@ -21,8 +21,8 @@ public class TraceRouteTest {
 	@Parameters
 	public static Collection<Object[]> data() {
 		Object[][] data = new Object[][] { 
-			{ "google.com", "invalidhost1.com" },
-			{ "facebook.com", "invalidhost2.com" } };
+			{ "jasmin.com", "invalidhost1.com" },
+			{ "oranum.com", "invalidhost2.com" } };
 		return Arrays.asList(data);
 	}
 
