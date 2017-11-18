@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<include resource="org/springframework/boot/logging/logback/base.xml" />
+
+	<property name="APP_LOG_FILE_NAME" value="Application.log" />
+	<property name="REPORT_LOG_FILE_NAME" value="Report.log" />
+
+	<property name="APP_LOG_FILE" value="logs/${APP_LOG_FILE_NAME}" />
+	<property name="REPORT_LOG_FILE" value="logs/${REPORT_LOG_FILE_NAME}" />
+	
+	<property name="PATTERN" value="[%d{yyyy-MM-dd HH:mm:ss}] [%thread] [%-5level] [%logger] - %msg%n" />
+
+	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>${PATTERN}</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="APP-FILE" class="ch.qos.logback.core.FileAppender">
+		<file>${APP_LOG_FILE}</file>
+		<append>false</append>
+		<encoder>
+			<pattern>${PATTERN}</pattern>
+		</encoder>
+	</appender>
+
+	<appender name="REPORT-FILE" class="ch.qos.logback.core.FileAppender">
+		<file>${REPORT_LOG_FILE}</file>
+		<append>false</append>
+		<encoder>
+			<pattern>${PATTERN}</pattern>
+		</encoder>
+	</appender>
+
+	<!-- Reporting Logs [WARN level] will go in the Report.log file -->
+	<logger name="com.docler.ping.service.ReportingService" level="WARN" additivity="false">
+		<appender-ref ref="REPORT-FILE" />
+	</logger>
+
+	<!-- Application Logs [INFO level] will go in the PingApp.log file as well 
+		as visible on Console -->
+	<logger name="com.docler.ping" level="INFO" additivity="false">
+		<appender-ref ref="CONSOLE" />
+		<appender-ref ref="APP-FILE" />
+	</logger>
+
+	<logger name="org.springframework.web" level="ERROR">
+		<appender-ref ref="CONSOLE" />
+	</logger>
+
+	<root level="ERROR">
+		<appender-ref ref="CONSOLE" />
+	</root>
+
+</configuration>
